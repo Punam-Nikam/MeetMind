@@ -1,0 +1,51 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment (IMPORTANT - don't track this)
+venv/
+env/
+.venv/
+ENV/
+
+# Environment variables / Secrets (VERY IMPORTANT - security!)
+.env
+*.env
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+
+# Logs and databases
+*.log
+*.sqlite3
+*.sqlite
+
+# Python distributions
+dist/
+build/
+*.egg-info/
+*.egg
+
+# MongoDB local files (if you ever run locally)
+/data/
+dump/
+
+# Testing files
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Django specific (for later)
+*.pyc
+migrations/
