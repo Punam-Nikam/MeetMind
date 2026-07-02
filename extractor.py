@@ -23,7 +23,7 @@ action_lines = re.findall(pattern, meeting_notes, re.MULTILINE)
 action_items = []
 
 print("\n" + "="*70)
-print("📝 MEETMIND - ACTION ITEM EXTRACTOR")
+print("MEETMIND - ACTION ITEM EXTRACTOR")
 print("="*70)
 
 for line in action_lines:
@@ -56,7 +56,7 @@ for line in action_lines:
 
 # --- Print the table ---
 print("\n" + "-"*70)
-print("📋 EXTRACTED ACTION ITEMS")
+print("EXTRACTED ACTION ITEMS")
 print("-"*70)
 print(f"{'Status':<6} {'Assignee':<14} {'Due Date':<15} {'Description'}")
 print("-"*70)
@@ -65,12 +65,12 @@ for item in action_items:
     print(item)
 
 print("-"*70)
-print(f"✅ Total action items extracted: {len(action_items)}")
+print(f"Total action items extracted: {len(action_items)}")
 print("="*70 + "\n")
 
 # --- NEW: SAVE TO MONGODB ---
 print("\n" + "-"*70)
-print("💾 SAVING TO MONGODB ATLAS")
+print("SAVING TO MONGODB ATLAS")
 print("-"*70)
 
 # Create a database handler
@@ -81,15 +81,15 @@ if db_handler.connect():
     meeting_id = db_handler.save_meeting(meeting_notes, action_items)
     
     if meeting_id:
-        print(f"📌 Meeting ID: {meeting_id}")
+        print(f"Meeting ID: {meeting_id}")
         
         # Show pending actions from the database
-        print("\n📋 Fetching pending actions from database...")
+        print("\nFetching pending actions from database...")
         pending = db_handler.get_pending_actions()
         for p in pending:
             print(f"   - {p['description']} (Assigned to: {p['assignee']})")
 else:
-    print("❌ Could not save to MongoDB. Check your connection string.")
+    print("Could not save to MongoDB. Check your connection string.")
 
 # Close the database connection
 db_handler.close()

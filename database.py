@@ -44,11 +44,11 @@ class MongoDBHandler:
             # Ping the database to test the connection
             self.client.admin.command('ping')
             
-            print("✅ Successfully connected to MongoDB Atlas!")
+            print("Successfully connected to MongoDB Atlas!")
             return True
             
         except Exception as e:
-            print(f"❌ Failed to connect to MongoDB: {e}")
+            print(f"Failed to connect to MongoDB: {e}")
             return False
     
     def save_meeting(self, meeting_text, action_items):
@@ -85,13 +85,13 @@ class MongoDBHandler:
             # Get the inserted ID
             inserted_id = result.inserted_id
             
-            print(f"✅ Meeting saved to MongoDB! (ID: {inserted_id})")
-            print(f"   📋 {len(action_items)} action items stored.")
+            print(f"Meeting saved to MongoDB! (ID: {inserted_id})")
+            print(f"  {len(action_items)} action items stored.")
             
             return inserted_id
             
         except Exception as e:
-            print(f"❌ Failed to save meeting: {e}")
+            print(f"Failed to save meeting: {e}")
             return None
     
     def get_all_meetings(self):
@@ -99,15 +99,15 @@ class MongoDBHandler:
         Retrieves all meetings from the database.
         """
         if self.db is None:
-            print("❌ Not connected to database.")
+            print(" Not connected to database.")
             return []
         
         try:
             meetings = list(self.db.meetings.find())
-            print(f"📁 Found {len(meetings)} meetings in database.")
+            print(f" Found {len(meetings)} meetings in database.")
             return meetings
         except Exception as e:
-            print(f"❌ Failed to retrieve meetings: {e}")
+            print(f" Failed to retrieve meetings: {e}")
             return []
     
     def get_pending_actions(self, assignee=None):
@@ -116,7 +116,7 @@ class MongoDBHandler:
         Optionally filter by assignee.
         """
         if self.db is None:
-            print("❌ Not connected to database.")
+            print(" Not connected to database.")
             return []
         
         try:
@@ -135,11 +135,11 @@ class MongoDBHandler:
             # Extract just the action items
             pending = [item["action_items"] for item in results]
             
-            print(f"📋 Found {len(pending)} pending action items.")
+            print(f" Found {len(pending)} pending action items.")
             return pending
             
         except Exception as e:
-            print(f"❌ Failed to get pending actions: {e}")
+            print(f" Failed to get pending actions: {e}")
             return []
     
     def close(self):
@@ -148,4 +148,4 @@ class MongoDBHandler:
         """
         if self.client:
             self.client.close()
-            print("🔒 MongoDB connection closed.")
+            print(" MongoDB connection closed.")
