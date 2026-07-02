@@ -7,7 +7,6 @@ db = MongoDBHandler()
 
 # Connect
 db.connect()
-
 # Get all meetings
 meetings = db.get_all_meetings()
 

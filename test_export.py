@@ -9,7 +9,6 @@ print("="*60)
 
 # Step 1: Create a database handler
 db = MongoDBHandler()
-
 # Step 2: Create a CSV exporter using the database handler
 exporter = CSVExporter(db)
 
