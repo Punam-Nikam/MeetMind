@@ -51,47 +51,27 @@ class MongoDBHandler:
             print(f"Failed to connect to MongoDB: {e}")
             return False
     
-    def save_meeting(self, meeting_text, action_items):
-        """
-        Saves a meeting and its action items to the database.
-        
-        Args:
-            meeting_text: The original meeting notes text.
-            action_items: A list of ActionItem objects.
-        
-        Returns:
-            The inserted document's ID.
-        """
-        # Check if we are connected
+    def save_meeting(self, meeting_text, action_items, meeting_title="Untitled Meeting"):
         if self.db is None:
             print("❌ Not connected to database. Call connect() first.")
             return None
         
-        # Convert action items to dictionaries (using our to_dict() method)
         action_dicts = [item.to_dict() for item in action_items]
         
-        # Create the meeting document
         meeting_document = {
+            "meeting_title": meeting_title,  # <-- NEW FIELD
             "meeting_text": meeting_text,
             "action_items": action_dicts,
-            "created_at": datetime.now(),  # When this was saved
+            "created_at": datetime.now(),
             "total_actions": len(action_items)
         }
         
         try:
-            # Insert the document into the "meetings" collection
             result = self.db.meetings.insert_one(meeting_document)
-            
-            # Get the inserted ID
-            inserted_id = result.inserted_id
-            
-            print(f"Meeting saved to MongoDB! (ID: {inserted_id})")
-            print(f"  {len(action_items)} action items stored.")
-            
-            return inserted_id
-            
+            print(f"✅ Meeting '{meeting_title}' saved to MongoDB! (ID: {result.inserted_id})")
+            return result.inserted_id
         except Exception as e:
-            print(f"Failed to save meeting: {e}")
+            print(f"❌ Failed to save meeting: {e}")
             return None
     
     def get_all_meetings(self):

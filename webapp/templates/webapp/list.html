@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MeetMind - Dashboard</title>
+    <style>
+        body { font-family: Arial; max-width: 1000px; margin: 20px auto; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: #007bff; color: white; padding: 10px; text-align: left; }
+        td { padding: 10px; border-bottom: 1px solid #ddd; }
+        tr:hover { background: #f5f5f5; }
+        .btn { background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>📚 MeetMind - Meeting Dashboard</h1>
+    <a href="/" class="btn">📤 Upload New Notes</a>
+    <hr>
+    <h2>All Meetings</h2>
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Meeting Title</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+        {% for meeting in meetings %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ meeting.meeting_title|default:"Untitled" }}</td>
+            <td>{{ meeting.created_at }}</td>
+            <td><a href="/view-meeting/{{ meeting.id }}/">View Details</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

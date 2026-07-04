@@ -1,0 +1,72 @@
+<!-- webapp/templates/webapp/upload.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MeetMind - Upload Notes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .help-text {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 MeetMind - Upload Meeting Notes</h1>
+        <p>Paste your meeting notes below. Use <strong>"Action:"</strong> to mark action items.</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Extract Action Items</button>
+        </form>
+        
+        <div class="help-text">
+            <strong>Example:</strong><br>
+            Action: Alice will update the design by tomorrow.<br>
+            Action: Bob to send the report @Bob due 2026-06-30<br>
+            Action: Charlie restart the server.
+        </div>
+    </div>
+</body>
+</html>

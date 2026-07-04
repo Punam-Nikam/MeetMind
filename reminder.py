@@ -71,8 +71,8 @@ class ReminderThread:
                 # Fetch all pending action items from the database
                 pending = self.db_handler.get_pending_actions()
                 
+             # Inside _run() method, replace the pending loop
                 if pending:
-                    # If there are pending items, print them as reminders
                     print("\n" + "="*60)
                     print("🔔 REMINDER: You have pending action items!")
                     print("="*60)
@@ -80,11 +80,26 @@ class ReminderThread:
                     for idx, action in enumerate(pending, 1):
                         assignee = action.get('assignee', 'Unassigned')
                         description = action.get('description', 'No description')
-                        due_date = action.get('due_date', 'No due date')
+                        due_date = action.get('due_date', None)
                         
-                        print(f"  {idx}. {description}")
+                        # --- NEW: Check if overdue ---
+                        overdue = False
+                        if due_date:
+                            from datetime import datetime
+                            try:
+                                due_dt = datetime.strptime(due_date, "%Y-%m-%d")
+                                if due_dt < datetime.now():
+                                    overdue = True
+                            except:
+                                pass
+                        
+                        # Print with OVERDUE tag
+                        if overdue:
+                            print(f"  {idx}. 🔴 {description} (OVERDUE!)")
+                        else:
+                            print(f"  {idx}. {description}")
                         print(f"     👤 Assigned to: {assignee}")
-                        print(f"     📅 Due: {due_date}")
+                        print(f"     📅 Due: {due_date if due_date else 'No due date'}")
                         print("-"*50)
                     
                     print(f"📋 Total pending: {len(pending)}")
