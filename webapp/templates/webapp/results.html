@@ -1,156 +1,250 @@
-<!-- webapp/templates/webapp/results.html -->
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>MeetMind - Results</title>
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: Arial, sans-serif;
-            max-width: 900px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: #f0f2f5;
+            padding: 40px 20px;
         }
-
         .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 35px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
-
         h1 {
-            color: #333;
-            border-bottom: 3px solid #28a745;
-            padding-bottom: 10px;
+            color: #1a1a2e;
+            font-size: 28px;
+            border-bottom: 3px solid #4CAF50;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
         }
-
-        .success {
-            background-color: #d4edda;
+        .success-badge {
+            background: #d4edda;
             color: #155724;
-            padding: 15px;
-            border-radius: 5px;
+            padding: 12px 20px;
+            border-radius: 8px;
             border: 1px solid #c3e6cb;
-            margin: 10px 0;
+            margin: 15px 0 25px;
         }
-
+        .meeting-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a2e;
+            background: #f8f9fa;
+            padding: 12px 18px;
+            border-radius: 8px;
+            border-left: 5px solid #007bff;
+            margin: 20px 0;
+        }
+        .notes-box {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            margin: 15px 0 25px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
+            font-size: 15px;
         }
-
         th {
-            background-color: #007bff;
+            background: #007bff;
             color: white;
-            padding: 10px;
+            padding: 12px 15px;
             text-align: left;
+            font-weight: 600;
         }
-
         td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
         }
-
         tr:hover {
-            background-color: #f5f5f5;
+            background: #f1f3f5;
         }
-
-        .badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
         .badge-pending {
-            background-color: #ffc107;
+            background: #ffc107;
             color: #856404;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
         }
-
-        .badge-completed {
-            background-color: #28a745;
+        .badge-overdue {
+            background: #dc3545;
             color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
         }
-
+        .badge-done {
+            background: #28a745;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .btn-group {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
         .btn {
             display: inline-block;
-            background-color: #007bff;
+            padding: 12px 28px;
+            background: #007bff;
             color: white;
-            padding: 10px 20px;
             text-decoration: none;
-            border-radius: 5px;
-            margin-top: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            transition: background 0.2s;
         }
-
         .btn:hover {
-            background-color: #0056b3;
+            background: #0056b3;
         }
-
-        .note-text {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            margin: 10px 0;
-            white-space: pre-wrap;
+        .btn-success {
+            background: #28a745;
+        }
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+        .btn-secondary {
+            background: #6c757d;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #6c757d;
+        }
+        .empty-state h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .empty-state p {
+            font-size: 16px;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #e9ecef;
+            color: #6c757d;
+            font-size: 14px;
+            text-align: center;
+        }
+        .count-badge {
+            background: #007bff;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
         }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <h1> Action Items Extracted!</h1>
 
-        <div class="success">
-             Successfully extracted {{ total_actions }} action items!
-            {% if saved %}
-             Saved to MongoDB! 
-            {% else %}
-             Could not save to MongoDB. Check your connection.
-            {% endif %}
-        </div>
+<div class="container">
+    <h1> Action Items Extracted!</h1>
 
-        <h2> Your Meeting Notes</h2>
-        <div class="note-text">{{ note_text }}</div>
-        <h1> Action Items Extracted!</h1>
-        <h2> {{ meeting_title }}</h2>
-        
-        {% if action_items %}
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Description</th>
-                    <th>Assignee</th>
-                    <th>Due Date</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in action_items %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ item.description }}</td>
-                    <td>{{ item.assignee|default:"Unassigned" }}</td>
-                    <td>{{ item.due_date|default:"Not specified" }}</td>
-                    <td>
-                        <span class="badge badge-pending">⏳ Pending</span>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="success-badge">
+         Successfully extracted <strong>{{ total_actions }}</strong> action items!
+        {% if saved %}
+         Saved to MongoDB!
         {% else %}
-        <p>No action items found. Make sure you used "Action:" in your notes.</p>
+         Could not save to MongoDB.
         {% endif %}
-
-        <br>
-        <a href="/" class="btn"> Upload More Notes</a>
-        <a href="/export-csv/" class="btn" style="background-color: #28a745;">📊 Export CSV</a>
     </div>
-</body>
 
+    <div class="meeting-title">
+         {{ meeting_title|default:"Untitled Meeting" }}
+        <span class="count-badge" style="margin-left:15px;">{{ total_actions }} tasks</span>
+    </div>
+
+    <h3 style="margin:15px 0 10px; color:#495057;"> Original Notes:</h3>
+    <div class="notes-box">{{ note_text }}</div>
+
+    <h3 style="margin:20px 0 10px; color:#495057;"> Extracted Action Items:</h3>
+
+    {% if action_items %}
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Description</th>
+                <th>Assignee</th>
+                <th>Due Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in action_items %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ item.description }}</td>
+                <td>
+                    {% if item.assignee %}
+                    <strong>{{ item.assignee }}</strong>
+                    {% else %}
+                    <span style="color:#6c757d;">Unassigned</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if item.due_date %}
+                    {{ item.due_date }}
+                    {% else %}
+                    <span style="color:#6c757d;">Not specified</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if item.is_completed %}
+                    <span class="badge-done">✅ Done</span>
+                    {% else %}
+                    <span class="badge-pending">⏳ Pending</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <h2> No action items found</h2>
+        <p>Make sure your notes contain task keywords like "Action:", "todo", or bullet points.</p>
+    </div>
+    {% endif %}
+
+    <div class="btn-group">
+        <a href="/" class="btn"> Upload More Notes</a>
+        <a href="/export-csv/" class="btn btn-success"> Export CSV</a>
+        <a href="/meetings/" class="btn btn-secondary"> View All Meetings</a>
+    </div>
+
+    <div class="footer">
+        Built with using Python, Django, and MongoDB
+    </div>
+</div>
+
+</body>
 </html>

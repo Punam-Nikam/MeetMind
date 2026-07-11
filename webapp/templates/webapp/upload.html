@@ -1,72 +1,276 @@
-<!-- webapp/templates/webapp/upload.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>MeetMind - Upload Notes</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MeetMind – Meeting Notes Organizer</title>
     <style>
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-image: url('https://cdn.pixabay.com/photo/2024/08/03/10/09/business-8941843_1280.jpg'); 
+            background-size: cover;
+            color: #1a2634;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
         }
+
         .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #333;
-            border-bottom: 3px solid #007bff;
-            padding-bottom: 10px;
-        }
-        textarea {
+            max-width: 720px;
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-family: monospace;
-            font-size: 14px;
         }
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
+
+        /* Simple Header */
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .header .logo {
+            font-size: 40px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #0b1a2b;
+            text-decoration: none;
+        
+        }
+
+        .header .logo svg {
+            width: 43px;
+            height: 43px;
+            vertical-align: middle;
+            margin-right: 8px;
+           
+        }
+        .header .logo span {
+            color: #1a73e0;
+        }
+
+        .header p {
+            font-size: 22px;
+            color: #000102;
+            margin-top: 6px;
+        }
+
+        .header .sub-badge {
+            display: inline-block;
+            background: #eef3f9;
+            padding: 4px 18px;
+            border-radius: 40px;
+            font-size: 14px;
+            color: #2c3f55;
             margin-top: 10px;
         }
-        button:hover {
-            background-color: #0056b3;
+
+        /* Form Card */
+        .form-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 40px 44px;
+            box-shadow: 0 8px 32px rgba(0, 20, 40, 0.06);
+            border: 1px solid #eaf0f6;
         }
-        .help-text {
-            color: #666;
+
+        .form-card h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0b1a2b;
+            margin-bottom: 4px;
+        }
+
+        .form-card .sub {
+            font-size: 15px;
+            color: #4f657c;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 18px;
+            font-weight: 500;
+            color: #116ee1;
+            margin-bottom: 5px;
+        }
+
+        .form-group .hint {
+            display: block;
+            font-size: 13px;
+            color: #68788d;
+            margin-top: 4px;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 15px;
+            font-family: inherit;
+            border: 1.5px solid #dce4ec;
+            border-radius: 14px;
+            background: #ffffff;
+            transition: border 0.2s, box-shadow 0.2s;
+            color: #0b1a2b;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2a7de1;
+            box-shadow: 0 0 0 4px rgba(42, 125, 225, 0.08);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 180px;
+            line-height: 1.7;
+        }
+
+        .example-box {
+            background: #f2f6fa;
+            border-radius: 14px;
+            padding: 16px 22px;
+            margin: 6px 0 20px 0;
             font-size: 14px;
-            margin-top: 5px;
+            color: #1e2c3a;
+            border-left: 4px solid #2a7de1;
+            line-height: 1.8;
+        }
+
+        .example-box code {
+            background: rgba(0, 0, 0, 0.04);
+            padding: 2px 10px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: #1a3b5c;
+        }
+
+        .btn-submit {
+            display: inline-block;
+            width: 100%;
+            padding: 16px 28px;
+            font-size: 17px;
+            font-weight: 500;
+            font-family: inherit;
+            color: #ffffff;
+            background: #1a3b5c;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            letter-spacing: 0.3px;
+            margin-top: 4px;
+        }
+
+        .btn-submit:hover {
+            background: #0f2a44;
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            font-size: 14px;
+            color: #7a8a9e;
+            padding-top: 28px;
+            margin-top: 20px;
+            border-top: 1px solid #e6edf4;
+        }
+
+        .footer a {
+            color: #2a7de1;
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            .form-card {
+                padding: 28px 20px;
+            }
+            .header .logo {
+                font-size: 40px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1> MeetMind - Upload Meeting Notes</h1>
-        <p>Paste your meeting notes below. Use <strong>"Action:"</strong> to mark action items.</p>
-        
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Extract Action Items</button>
-        </form>
-        
-        <div class="help-text">
-            <strong>Example:</strong><br>
-            Action: Alice will update the design by tomorrow.<br>
-            Action: Bob to send the report @Bob due 2026-06-30<br>
-            Action: Charlie restart the server.
-        </div>
+
+<div class="container">
+
+    <!-- Header -->
+    <div class="header">
+        <a href="/" class="logo"><svg fill="#000000" viewBox="0 0 32.00 32.00" id="Outlined" xmlns="http://www.w3.org/2000/svg" stroke="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title></title> <g id="Fill"> <path d="M25,26a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V5H17V3H5V26a3,3,0,0,0,3,3H24a3,3,0,0,0,3-3V13H25Z"></path> <path d="M27.12,2.88a3.08,3.08,0,0,0-4.24,0L17,8.75,16,14.05,21.25,13l5.87-5.87A3,3,0,0,0,27.12,2.88Zm-6.86,8.27-1.76.35.35-1.76,3.32-3.33,1.42,1.42Zm5.45-5.44-.71.7L23.59,5l.7-.71h0a1,1,0,0,1,1.42,0A1,1,0,0,1,25.71,5.71Z"></path> </g> </g></svg>
+            Meet<span>Mind</span></a>
+        <p>Paste your messy meeting notes and get structured tasks</p>
     </div>
+
+    <!-- Form -->
+    <div class="form-card">
+        <h2>Enter your notes</h2>
+        <p class="sub">Give your meeting a title and paste the raw text below.</p>
+
+        <form method="post">
+            <!-- Django Security Token (always required for POST forms) -->
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="id_meeting_title">Meeting title</label>
+                <input
+                    type="text"
+                    name="meeting_title"
+                    id="id_meeting_title"
+                    maxlength="100"
+                    placeholder="e.g. Sprint Planning, Client Call, Design Review"
+                />
+                <span class="hint">Give your meeting a clear name so you can find it later.</span>
+            </div>
+
+            <div class="form-group">
+                <label for="id_note_text">Notes</label>
+                <textarea
+                    name="note_text"
+                    id="id_note_text"
+                    rows="8"
+                    placeholder="Paste your meeting notes here…"
+                ></textarea>
+                <span class="hint">
+                    We scan for action words, names, bullet points, and dates.
+                </span>
+            </div>
+
+            <div class="example-box">
+                <strong>Example:</strong><br />
+                <code>Action: Alice will update the design by tomorrow.</code><br />
+                <code>Action: Bob to send the report @Bob due 2026-06-30</code><br />
+                <code>- Charlie restart the server</code><br />
+                <code>meeting with client on tuesday</code>
+            </div>
+
+            <button type="submit" class="btn-submit">Extract Action Items</button>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        Built with Python, Django &amp; MongoDB
+    </div>
+</div>
+
 </body>
 </html>
