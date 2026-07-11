@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .forms import MeetingNoteForm
 
-# Add parent directory to Python path to import our modules
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from models import ActionItem
@@ -15,7 +15,10 @@ from database import MongoDBHandler
 from extractor import extract_action_items
 
 from django.shortcuts import render, get_object_or_404
-from bson import ObjectId  # <-- Add this import at the top
+from bson import ObjectId  
+
+from django.shortcuts import redirect
+from django.urls import reverse
 
 def list_meetings(request):
     db_handler = MongoDBHandler()
@@ -23,64 +26,84 @@ def list_meetings(request):
     if db_handler.connect():
         raw_meetings = db_handler.get_all_meetings()
         for m in raw_meetings:
-            m['id'] = str(m['_id'])  # Convert ObjectId to string for URL
+            m['id'] = str(m['_id'])  
             meetings.append(m)
         db_handler.close()
     return render(request, 'webapp/list.html', {'meetings': meetings})
 
 def view_meeting(request, meeting_id):
+    """
+    Displays a single meeting with its action items.
+    """
     db_handler = MongoDBHandler()
     meeting = None
+    
     if db_handler.connect():
-        # Fetch one document by its ID
-        obj_id = ObjectId(meeting_id)
-        meeting = db_handler.db.meetings.find_one({'_id': obj_id})
-        db_handler.close()
+        try:
+            from bson import ObjectId
+            obj_id = ObjectId(meeting_id)
+            meeting = db_handler.db.meetings.find_one({'_id': obj_id})
+        except Exception as e:
+            print(f"Error fetching meeting: {e}")
+        finally:
+            db_handler.close()
+    
     if not meeting:
         return HttpResponse("Meeting not found.", status=404)
+  
+    meeting['id'] = str(meeting['_id'])  
+    
     return render(request, 'webapp/detail.html', {'meeting': meeting})
-
 
 
 def upload_notes(request):
     if request.method == 'POST':
-        form = MeetingNoteForm(request.POST)
+        form = MeetingNoteForm(request.POST, request.FILES)
         if form.is_valid():
-            note_text = form.cleaned_data['note_text']
-            meeting_title = form.cleaned_data['meeting_title']  # <-- Get title
-            
-                       # Extract action items using our function
+            meeting_title = form.cleaned_data.get('meeting_title', 'Untitled Meeting')
+            note_text = form.cleaned_data.get('note_text')
+            note_file = form.cleaned_data.get('note_file')
+
+            # If a file is uploaded, then we read its content
+            if note_file:
+                try:
+                    note_text = note_file.read().decode('utf-8')
+                except Exception as e:
+                    note_text = f"Error reading file: {e}"
+            # If no file is uploaded, then we use the pasted text from the textarea.
+            else:
+                note_text = form.cleaned_data.get('note_text')
+
+            # If both are empty, then show error
+            if not note_text:
+                return render(request, 'webapp/upload.html', {'form': form, 'error': 'No content provided.'})
+
             action_items = extract_action_items(note_text)
-            
-            # --- NEW: Only save if we found actions ---
+
+            db_handler = MongoDBHandler()
             saved = False
             meeting_id = None
-            if action_items:
-                db_handler = MongoDBHandler()
-                if db_handler.connect():
-                    meeting_id = db_handler.save_meeting(note_text, action_items, meeting_title)
-                    db_handler.close()
-                    saved = True
-            else:
-                # If no actions found, show a warning but DON'T save an empty meeting
-                print("No actions found, skipping MongoDB save.")
-            
+            if db_handler.connect():
+                meeting_id = db_handler.save_meeting(note_text, action_items, meeting_title)
+                db_handler.close()
+                saved = True
+
             return render(request, 'webapp/results.html', {
                 'action_items': action_items,
                 'total_actions': len(action_items),
                 'saved': saved,
                 'meeting_id': meeting_id,
                 'note_text': note_text,
-                'meeting_title': meeting_title,  # <-- Pass to template
+                'meeting_title': meeting_title,
             })
         else:
             return render(request, 'webapp/upload.html', {'form': form})
-    
-    form = MeetingNoteForm()
+    else:
+        form = MeetingNoteForm()
     return render(request, 'webapp/upload.html', {'form': form})
 
 
-# webapp/views.py
+# webapp/views.py : export to csv file!!
 
 def export_csv(request):
     from django.http import HttpResponse
@@ -101,7 +124,7 @@ def export_csv(request):
     response['Content-Disposition'] = 'attachment; filename="all_actions.csv"'
     
     writer = csv.writer(response)
-    # Add "Meeting Title" column
+    # Add "Meeting Title" columns 
     writer.writerow(['Meeting Title', 'Created At', 'Description', 'Assignee', 'Due Date', 'Status'])
     
     for meeting in meetings:
@@ -119,3 +142,19 @@ def export_csv(request):
             ])
     
     return response
+
+
+
+def mark_complete(request, meeting_id, action_index):
+    """
+    Marks a specific action item as complete and redirects back to the meeting detail page.
+    """
+    db_handler = MongoDBHandler()
+    success = False
+    
+    if db_handler.connect():
+        success = db_handler.mark_action_complete(meeting_id, action_index)
+        db_handler.close()
+    
+    #  back to the meeting detail page 
+    return redirect('view_meeting', meeting_id=meeting_id)

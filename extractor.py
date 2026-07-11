@@ -5,7 +5,7 @@ import re
 from datetime import datetime, timedelta
 from models import ActionItem
 
-# List of known team members
+# List of known team members we can edit it later.
 TEAM_MEMBERS = ["Alice", "Bob", "Charlie", "John", "Jane", "Vishakha", "Siddhi", "Ashwini", "Rahul", "Priya", "Manager", "Client"]
 
 # Common action words
@@ -133,16 +133,14 @@ def extract_action_items(text, team_members=None):
     
     return action_items
 
-# ============================================
-# TEST THIS EXACT CODE WITH YOUR NOTES
-# ============================================
+
 if __name__ == "__main__":
-    # YOUR EXACT NOTES
+    # NOTES
     test_text = """
 Communication with ai tool daily
 Project submission - 7 July
 java notes completion
-next meet with siddhi on tuesday
+next meet with client on tuesday
 laravel project 3 tasks pending
 college stating on 6 july
 next client - ashwini

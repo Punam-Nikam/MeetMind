@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,7 +15,7 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-image: url('https://cdn.pixabay.com/photo/2024/08/03/10/09/business-8941843_1280.jpg'); 
+            background-image: url('https://cdn.pixabay.com/photo/2024/08/03/10/09/business-8941843_1280.jpg');
             background-size: cover;
             color: #1a2634;
             background-position: center;
@@ -42,7 +43,7 @@
             letter-spacing: -0.02em;
             color: #0b1a2b;
             text-decoration: none;
-        
+
         }
 
         .header .logo svg {
@@ -50,8 +51,9 @@
             height: 43px;
             vertical-align: middle;
             margin-right: 8px;
-           
+
         }
+
         .header .logo span {
             color: #1a73e0;
         }
@@ -203,74 +205,90 @@
             .form-card {
                 padding: 28px 20px;
             }
+
             .header .logo {
                 font-size: 40px;
             }
         }
     </style>
 </head>
+
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <!-- Header -->
-    <div class="header">
-        <a href="/" class="logo"><svg fill="#000000" viewBox="0 0 32.00 32.00" id="Outlined" xmlns="http://www.w3.org/2000/svg" stroke="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title></title> <g id="Fill"> <path d="M25,26a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V5H17V3H5V26a3,3,0,0,0,3,3H24a3,3,0,0,0,3-3V13H25Z"></path> <path d="M27.12,2.88a3.08,3.08,0,0,0-4.24,0L17,8.75,16,14.05,21.25,13l5.87-5.87A3,3,0,0,0,27.12,2.88Zm-6.86,8.27-1.76.35.35-1.76,3.32-3.33,1.42,1.42Zm5.45-5.44-.71.7L23.59,5l.7-.71h0a1,1,0,0,1,1.42,0A1,1,0,0,1,25.71,5.71Z"></path> </g> </g></svg>
-            Meet<span>Mind</span></a>
-        <p>Paste your messy meeting notes and get structured tasks</p>
+        <!-- Header -->
+        <div class="header">
+            <a href="/" class="logo"><svg fill="#000000" viewBox="0 0 32.00 32.00" id="Outlined"
+                    xmlns="http://www.w3.org/2000/svg" stroke="#000000">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <title></title>
+                        <g id="Fill">
+                            <path
+                                d="M25,26a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V5H17V3H5V26a3,3,0,0,0,3,3H24a3,3,0,0,0,3-3V13H25Z">
+                            </path>
+                            <path
+                                d="M27.12,2.88a3.08,3.08,0,0,0-4.24,0L17,8.75,16,14.05,21.25,13l5.87-5.87A3,3,0,0,0,27.12,2.88Zm-6.86,8.27-1.76.35.35-1.76,3.32-3.33,1.42,1.42Zm5.45-5.44-.71.7L23.59,5l.7-.71h0a1,1,0,0,1,1.42,0A1,1,0,0,1,25.71,5.71Z">
+                            </path>
+                        </g>
+                    </g>
+                </svg>
+                Meet<span>Mind</span></a>
+            <p>Paste your messy meeting notes and get structured tasks</p>
+        </div>
+
+        <!-- Form -->
+        <div class="form-card">
+            <h2>Enter your notes</h2>
+            <p class="sub">Give your meeting a title and paste the raw text below.</p>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- Meeting Title -->
+                <div class="form-group">
+                    <label for="id_meeting_title">Meeting title</label>
+                    <input type="text" name="meeting_title" id="id_meeting_title" maxlength="100"
+                        placeholder="e.g. Sprint Planning, Client Call, Design Review" />
+                    <span class="hint">Give your meeting a clear name.</span>
+                </div>
+
+                <!-- Paste Notes -->
+                <div class="form-group">
+                    <label for="id_note_text">Paste your notes</label>
+                    <textarea name="note_text" id="id_note_text" rows="6"
+                        placeholder="Paste your meeting notes here…"></textarea>
+                    <span class="hint">We scan for action words, names, bullet points, and dates.</span>
+                </div>
+
+                <!-- OR Upload File -->
+                <div class="form-group">
+                    <label for="id_note_file">Or upload a .txt file</label>
+                    <input type="file" name="note_file" id="id_note_file" accept=".txt" />
+                    <span class="hint">Upload a text file with your meeting notes.</span>
+                </div>
+
+                <!-- Example Box -->
+                <div class="example-box">
+                    <strong>Example:</strong><br />
+                    <code>Action: Alice will update the design by tomorrow.</code><br />
+                    <code>Action: Bob to send the report @Bob due 2026-06-30</code><br />
+                    <code>- Charlie restart the server</code><br />
+                    <code>meeting with siddhi on tuesday</code>
+                </div>
+
+                <button type="submit" class="btn-submit">Extract Action Items</button>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            Built with Python, Django &amp; MongoDB
+        </div>
     </div>
-
-    <!-- Form -->
-    <div class="form-card">
-        <h2>Enter your notes</h2>
-        <p class="sub">Give your meeting a title and paste the raw text below.</p>
-
-        <form method="post">
-            <!-- Django Security Token (always required for POST forms) -->
-            {% csrf_token %}
-
-            <div class="form-group">
-                <label for="id_meeting_title">Meeting title</label>
-                <input
-                    type="text"
-                    name="meeting_title"
-                    id="id_meeting_title"
-                    maxlength="100"
-                    placeholder="e.g. Sprint Planning, Client Call, Design Review"
-                />
-                <span class="hint">Give your meeting a clear name so you can find it later.</span>
-            </div>
-
-            <div class="form-group">
-                <label for="id_note_text">Notes</label>
-                <textarea
-                    name="note_text"
-                    id="id_note_text"
-                    rows="8"
-                    placeholder="Paste your meeting notes here…"
-                ></textarea>
-                <span class="hint">
-                    We scan for action words, names, bullet points, and dates.
-                </span>
-            </div>
-
-            <div class="example-box">
-                <strong>Example:</strong><br />
-                <code>Action: Alice will update the design by tomorrow.</code><br />
-                <code>Action: Bob to send the report @Bob due 2026-06-30</code><br />
-                <code>- Charlie restart the server</code><br />
-                <code>meeting with client on tuesday</code>
-            </div>
-
-            <button type="submit" class="btn-submit">Extract Action Items</button>
-        </form>
-    </div>
-
-    <!-- Footer -->
-    <div class="footer">
-        Built with Python, Django &amp; MongoDB
-    </div>
-</div>
 
 </body>
+
 </html>
