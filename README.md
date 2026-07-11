@@ -13,7 +13,7 @@ A Meeting Notes Organizer that extracts action items, assigns team members, dete
 | **Type** | Full-stack Web Application + REST API |
 | **Status** | ✅ Complete |
 
-MeetMind understands messy sentences like *"meeting with siddhi on tuesday"* or *"Project submission - 7 July"* and converts them into structured, trackable tasks.
+MeetMind understands messy sentences like *"meeting with client on tuesday"* or *"Project submission - 7 July"* and converts them into structured, trackable tasks.
 
 ---
 
