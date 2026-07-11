@@ -4,7 +4,7 @@ import time
 from reminder import ReminderThread
 
 print("="*60)
-print("🚀 MEETMIND - REMINDER SERVICE")
+print(" MEETMIND - REMINDER SERVICE")
 print("="*60)
 print("This program starts a background reminder thread.")
 print("It will check for pending action items every 10 seconds.")
@@ -17,7 +17,7 @@ reminder = ReminderThread(interval=10)
 # Step 2: Start the background thread
 reminder.start()
 
-print("\n💡 The background thread is running. You can continue working.")
+print("\n The background thread is running. You can continue working.")
 print("   Watch the console for reminders!\n")
 
 try:

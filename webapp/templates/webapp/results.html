@@ -102,21 +102,21 @@
 
 <body>
     <div class="container">
-        <h1>✅ Action Items Extracted!</h1>
+        <h1> Action Items Extracted!</h1>
 
         <div class="success">
-            ✅ Successfully extracted {{ total_actions }} action items!
+             Successfully extracted {{ total_actions }} action items!
             {% if saved %}
-            ✅ Saved to MongoDB! 
+             Saved to MongoDB! 
             {% else %}
-            ⚠️ Could not save to MongoDB. Check your connection.
+             Could not save to MongoDB. Check your connection.
             {% endif %}
         </div>
 
-        <h2>📋 Your Meeting Notes</h2>
+        <h2> Your Meeting Notes</h2>
         <div class="note-text">{{ note_text }}</div>
-        <h1>✅ Action Items Extracted!</h1>
-        <h2>📅 {{ meeting_title }}</h2>
+        <h1> Action Items Extracted!</h1>
+        <h2> {{ meeting_title }}</h2>
         
         {% if action_items %}
         <table>
@@ -148,7 +148,7 @@
         {% endif %}
 
         <br>
-        <a href="/" class="btn">📤 Upload More Notes</a>
+        <a href="/" class="btn"> Upload More Notes</a>
         <a href="/export-csv/" class="btn" style="background-color: #28a745;">📊 Export CSV</a>
     </div>
 </body>

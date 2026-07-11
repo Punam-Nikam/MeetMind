@@ -23,7 +23,7 @@ class MongoDBHandler:
             connection_string = os.getenv("MONGO_URI")
             
         if not connection_string:
-            raise ValueError("❌ No MongoDB connection string found! Set MONGO_URI in .env file.")
+            raise ValueError(" No MongoDB connection string found! Set MONGO_URI in .env file.")
         
         self.connection_string = connection_string
         self.db_name = db_name
@@ -53,7 +53,7 @@ class MongoDBHandler:
     
     def save_meeting(self, meeting_text, action_items, meeting_title="Untitled Meeting"):
         if self.db is None:
-            print("❌ Not connected to database. Call connect() first.")
+            print(" Not connected to database. Call connect() first.")
             return None
         
         action_dicts = [item.to_dict() for item in action_items]
@@ -68,10 +68,10 @@ class MongoDBHandler:
         
         try:
             result = self.db.meetings.insert_one(meeting_document)
-            print(f"✅ Meeting '{meeting_title}' saved to MongoDB! (ID: {result.inserted_id})")
+            print(f" Meeting '{meeting_title}' saved to MongoDB! (ID: {result.inserted_id})")
             return result.inserted_id
         except Exception as e:
-            print(f"❌ Failed to save meeting: {e}")
+            print(f" Failed to save meeting: {e}")
             return None
     
     def get_all_meetings(self):

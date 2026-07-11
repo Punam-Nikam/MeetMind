@@ -40,7 +40,7 @@ class CSVExporter:
         
         # If there are no meetings, nothing to export
         if not meetings:
-            print("📭 No meetings found in database.")
+            print(" No meetings found in database.")
             return False
         
         # --- Step 3: Prepare the data for CSV ---

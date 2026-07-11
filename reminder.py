@@ -28,7 +28,7 @@ class ReminderThread:
         This method is called from the main program.
         """
         if self.running:
-            print("⚠️ Reminder thread is already running.")
+            print(" Reminder thread is already running.")
             return
         
         self.running = True
@@ -40,7 +40,7 @@ class ReminderThread:
         
         # Start the thread
         self.thread.start()
-        print(f"🔄 Reminder thread started! Checking every {self.interval} seconds.")
+        print(f" Reminder thread started! Checking every {self.interval} seconds.")
     
     def stop(self):
         """
@@ -48,7 +48,7 @@ class ReminderThread:
         Sets the running flag to False, which breaks the loop in _run.
         """
         self.running = False
-        print("🛑 Reminder thread stopping...")
+        print(" Reminder thread stopping...")
     
     def _run(self):
         """
@@ -60,10 +60,10 @@ class ReminderThread:
         
         # Connect to the database
         if not self.db_handler.connect():
-            print("❌ Reminder thread: Failed to connect to MongoDB.")
+            print(" Reminder thread: Failed to connect to MongoDB.")
             return
         
-        print("✅ Reminder thread: Connected to MongoDB.")
+        print(" Reminder thread: Connected to MongoDB.")
         
         # Loop while the thread should keep running
         while self.running:
@@ -74,7 +74,7 @@ class ReminderThread:
              # Inside _run() method, replace the pending loop
                 if pending:
                     print("\n" + "="*60)
-                    print("🔔 REMINDER: You have pending action items!")
+                    print(" REMINDER: You have pending action items!")
                     print("="*60)
                     
                     for idx, action in enumerate(pending, 1):
@@ -95,27 +95,27 @@ class ReminderThread:
                         
                         # Print with OVERDUE tag
                         if overdue:
-                            print(f"  {idx}. 🔴 {description} (OVERDUE!)")
+                            print(f"  {idx}.  {description} (OVERDUE!)")
                         else:
                             print(f"  {idx}. {description}")
-                        print(f"     👤 Assigned to: {assignee}")
-                        print(f"     📅 Due: {due_date if due_date else 'No due date'}")
+                        print(f"      Assigned to: {assignee}")
+                        print(f"      Due: {due_date if due_date else 'No due date'}")
                         print("-"*50)
                     
-                    print(f"📋 Total pending: {len(pending)}")
+                    print(f" Total pending: {len(pending)}")
                     print("="*60 + "\n")
                 else:
                     # No pending items, print a quiet status
-                    print(f"✅ [{time.strftime('%H:%M:%S')}] No pending actions found. All clear!")
+                    print(f" [{time.strftime('%H:%M:%S')}] No pending actions found. All clear!")
                 
                 # Sleep for the specified interval
                 time.sleep(self.interval)
                 
             except Exception as e:
                 # If any error occurs, print it but keep the thread running
-                print(f"❌ Reminder thread error: {e}")
+                print(f" Reminder thread error: {e}")
                 time.sleep(self.interval)
         
         # When the loop exits, close the database connection
         self.db_handler.close()
-        print("🛑 Reminder thread stopped.")
+        print(" Reminder thread stopped.")

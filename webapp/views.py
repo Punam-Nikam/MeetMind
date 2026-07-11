@@ -89,13 +89,13 @@ def export_csv(request):
     
     db_handler = MongoDBHandler()
     if not db_handler.connect():
-        return HttpResponse("❌ Could not connect to database.", status=500)
+        return HttpResponse(" Could not connect to database.", status=500)
     
     meetings = db_handler.get_all_meetings()
     db_handler.close()
     
     if not meetings:
-        return HttpResponse("📭 No meetings found in database.", status=404)
+        return HttpResponse(" No meetings found in database.", status=404)
     
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="all_actions.csv"'
