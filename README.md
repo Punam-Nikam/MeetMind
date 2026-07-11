@@ -108,8 +108,10 @@ python main.py
 
 **Input:**
 ```
+Messy meeting notes
+ex:
 Project submission - 7 July
-meeting with siddhi on tuesday
+meeting with client on tuesday
 ```
 
 **Output:**
@@ -117,7 +119,7 @@ meeting with siddhi on tuesday
 | Description | Assignee | Due Date |
 | :--- | :--- | :--- |
 | Project submission | Unassigned | 2026-07-07 |
-| meeting with siddhi | Siddhi | 2026-07-09 |
+| meeting with client | client | 2026-07-09 |
 
 ---
 
