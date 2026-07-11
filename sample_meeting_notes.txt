@@ -1,0 +1,7 @@
+
+Project Review Meeting
+Akansha will update the design by tomorrow.
+Action: Bob to send the report Product manager due 2026-07-15
+team leader restart the server building
+meeting with new client on friday
+Need to fix the login bug
