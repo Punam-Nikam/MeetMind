@@ -1,56 +1,140 @@
-# 🧠 MeetMind — The AI-Powered Meeting Secretary
+# MeetMind
 
-> **MeetMind** is a full-stack Python application that transforms messy meeting notes into structured, trackable action items. It automatically extracts tasks, assigns team members, detects due dates, stores everything in the cloud, and sends proactive reminders—all without requiring the user to write perfectly formatted notes.
+A Meeting Notes Organizer that extracts action items, assigns team members, detects due dates, and saves everything to the cloud—without requiring perfectly formatted text.
 
 ---
 
-## 📋 Project Overview
+## Project Overview
 
-| **Category** | **Details** |
+| Category | Details |
 | :--- | :--- |
 | **Project Name** | MeetMind |
 | **Domain** | Productivity & Task Automation |
 | **Type** | Full-stack Web Application + REST API |
-| **Status** | ✅ **Production-Ready Prototype** |
+| **Status** | ✅ Complete |
 
-In today's fast-paced world, meeting notes are often written haphazardly: *"meeting with siddhi on tuesday"*, *"Project submission - 7 July"*, *"cation - fix the server"*. MeetMind understands these messy, real-world sentences and converts them into structured data.
+MeetMind understands messy sentences like *"meeting with siddhi on tuesday"* or *"Project submission - 7 July"* and converts them into structured, trackable tasks.
 
 ---
 
-## ✨ Key Features (What It Actually Does)
+## Features
 
-| # | Feature | How It Works |
+- Upload messy meeting notes via Django web form
+- Smart extraction using Regex + keyword detection (does **not** require "Action:")
+- Auto-assigns tasks to team members found in sentences
+- Parses dates like "tomorrow", "tuesday", "7 July" → `YYYY-MM-DD`
+- Stores meetings and tasks in MongoDB Atlas
+- Background thread checks for pending/overdue tasks every 10 seconds
+- REST API endpoints (`/api/pending/`, `/api/meetings/`) for Slack integration
+- One-click CSV export for Excel
+- Meeting dashboard to view all stored meetings
+
+---
+
+## Tech Stack
+
+- Python 3, Django 6.0, Django REST Framework
+- MongoDB Atlas (PyMongo)
+- Regular Expressions (Regex)
+- Python Threading
+- python-dotenv
+
+---
+
+## Project Structure
+
+```
+meetmind/
+├── meetmind_web/            # Django project settings
+│   ├── settings.py
+│   └── urls.py
+├── webapp/                  # Django app
+│   ├── templates/           # HTML pages
+│   ├── views.py             # Web logic + CSV export
+│   ├── api_views.py         # DRF API endpoints
+│   ├── serializers.py       # JSON serializers
+│   ├── forms.py             # Django form definition
+│   └── urls.py              # App URL routes
+├── models.py                # ActionItem OOP class
+├── extractor.py             # Regex parsing logic
+├── database.py              # MongoDB CRUD operations
+├── reminder.py              # Threading background worker
+├── main.py                  # Launch script for reminders
+├── export.py                # CSV export utility
+├── .env.example             # Environment template
+└── manage.py                # Django CLI
+```
+
+---
+
+## How to Run
+
+**1. Setup virtual environment:**
+```bash
+python -m venv venv
+source venv/bin/activate  # or `venv\Scripts\activate` on Windows
+pip install -r requirements.txt
+```
+
+**2. Configure MongoDB:**
+Create a `.env` file with:
+```
+MONGO_URI="your_mongodb_atlas_uri"
+```
+
+**3. Run the web server:**
+```bash
+python manage.py runserver
+```
+Open `http://127.0.0.1:8000/`
+
+**4. (Optional) Start background reminders:**
+```bash
+python main.py
+```
+
+---
+
+## API Endpoints
+
+| Endpoint | Description |
+| :--- | :--- |
+| `/api/pending/` | JSON list of all pending tasks |
+| `/api/meetings/` | JSON list of all meetings |
+
+---
+
+## Sample Input → Output
+
+**Input:**
+```
+Project submission - 7 July
+meeting with siddhi on tuesday
+```
+
+**Output:**
+
+| Description | Assignee | Due Date |
 | :--- | :--- | :--- |
-| 1 | **Messy Text Upload** | Django web form accepts raw text or file uploads. |
-| 2 | **Smart Task Extraction** | Uses Regex + Keyword Detection to find tasks. Does **not** require "Action:"—it detects bullet points, action verbs, names, and dates naturally. |
-| 3 | **Auto-Assignment** | Scans the entire sentence for known team members (Alice, Bob, Siddhi, etc.) and assigns the task to them. |
-| 4 | **Date Intelligence** | Parses relative dates like "tomorrow", "tuesday", "7 July" and converts them to `YYYY-MM-DD`. |
-| 5 | **Cloud Storage** | Saves all meetings and action items to MongoDB Atlas (cloud database). |
-| 6 | **Background Reminders** | A separate background thread (multithreading) checks for pending/overdue tasks every 10 seconds and prints reminders to the console. |
-| 7 | **REST API (DRF)** | Exposes JSON endpoints (`/api/pending/`, `/api/meetings/`) for Slack or third-party integrations. |
-| 8 | **CSV Export** | Exports all action items to a `.csv` file that opens directly in Excel. |
-| 9 | **Meeting Dashboard** | Lists all stored meetings with links to view individual notes and tasks. |
+| Project submission | Unassigned | 2026-07-07 |
+| meeting with siddhi | Siddhi | 2026-07-09 |
 
 ---
 
-## 🏗️ Architecture & Task Breakdown
+## Step-by-Step Progress (9 Tasks)
 
-The project strictly follows the **9-Step Task List** defined at the start. Here is the exact mapping between the tasks and the codebase:
-
-| Step | Task Description | Implemented In | Status |
+| Step | Task | File | Status |
 | :--- | :--- | :--- | :--- |
-| **1** | Build Django form to paste or upload notes | `webapp/forms.py`, `webapp/views.py` | ✅ |
-| **2** | Use regex to extract action items, `@name`, due dates | `extractor.py` (`extract_action_items`) | ✅ |
-| **3** | Auto-assign action items to team members by name mention | `extractor.py` (scans `TEAM_MEMBERS` list) | ✅ |
-| **4** | Store meetings and action items in MongoDB | `database.py` (`MongoDBHandler.save_meeting`) | ✅ |
-| **5** | Track action item completion status | `models.py` (`ActionItem.is_completed`) | ✅ |
-| **6** | Use multithreading for bulk notes processing | `reminder.py` & `main.py` | ✅ |
-| **7** | Send pending action item reminders using threading | `reminder.py` (background while-loop) | ✅ |
-| **8** | Build DRF API for Slack/Teams integration | `webapp/api_views.py` & `serializers.py` | ✅ |
-| **9** | Export action items as CSV | `webapp/views.py` (`export_csv`) & `export.py` | ✅ |
+| 1 | Django upload form | `webapp/forms.py`, `views.py` | ✅ |
+| 2 | Regex extraction | `extractor.py` | ✅ |
+| 3 | Auto-assignment | `extractor.py` | ✅ |
+| 4 | MongoDB storage | `database.py` | ✅ |
+| 5 | Completion status | `models.py` | ✅ |
+| 6 | Multithreading | `reminder.py` | ✅ |
+| 7 | Background reminders | `reminder.py` | ✅ |
+| 8 | DRF API | `api_views.py`, `serializers.py` | ✅ |
+| 9 | CSV export | `views.py` (`export_csv`) | ✅ |
 
 ---
 
-## 📁 Project Folder Structure
-
-Here is the exact file structure of the project. Every file has a specific purpose.
+Done!!
