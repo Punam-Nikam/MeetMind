@@ -21,12 +21,18 @@ from django.shortcuts import redirect
 from django.urls import reverse
 
 def list_meetings(request):
+    # when the site is live, show a "hidden" message instead of the data
+    import os
+    if os.environ.get('ENV') == 'production':
+        return HttpResponse("This page is private. Contact the developer for access.", status=404)
+    
+    # Original code (only runs on local computer)
     db_handler = MongoDBHandler()
     meetings = []
     if db_handler.connect():
         raw_meetings = db_handler.get_all_meetings()
         for m in raw_meetings:
-            m['id'] = str(m['_id'])  
+            m['id'] = str(m['_id'])
             meetings.append(m)
         db_handler.close()
     return render(request, 'webapp/list.html', {'meetings': meetings})
